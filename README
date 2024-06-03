@@ -1,0 +1,6 @@
+Bezier curve works by pressing g and then manually moving your camera view to look around as you travel through the world.
+Press g again to return to normal wasd control. As of now, the "cinematic view" can only occur once per program run.
+
+No collision detection.
+
+The wolf is texture mapped, but the texture doesn't fit too well. (Definitely going to figure out the original)
