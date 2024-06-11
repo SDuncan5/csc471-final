@@ -3,6 +3,7 @@
 #define CAMERA_H
 
 #include <glm/gtc/type_ptr.hpp>
+#include "Model.h"
 
 class Camera {
 
@@ -15,11 +16,12 @@ public:
 	float rotAngle = 0.0;
 	int w, a, s, d = 0;
 
+	//Camera(Model player);
 	Camera();
 	glm::mat4 process(double ftime);
 
 private:
-
+	//Model player;
 };
 
 #endif

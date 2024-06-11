@@ -35,7 +35,6 @@ Model::~Model()
 {
 }
 
-
 // Draws the model
 void Model::draw(const shared_ptr<Program> prog) const {
 	for (int i = 0; i < mesh_shapes.size(); i++) {

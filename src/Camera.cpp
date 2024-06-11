@@ -2,6 +2,7 @@
 
 using namespace glm;
 
+//amera::Camera(Model player)
 Camera::Camera()
 {
 	/*w = a = s = d = 0;
@@ -11,6 +12,7 @@ Camera::Camera()
 	pos = glm::vec3(0, 0, 0);
 	front = glm::vec3(0, 0, -1);
 	up = glm::vec3(0, 1, 0);*/
+	//this->player = player;
 }
 
 glm::mat4 Camera::process(double ftime)

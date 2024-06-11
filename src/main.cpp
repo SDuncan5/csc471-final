@@ -8,16 +8,17 @@
 #include <glad/glad.h>
 #include <chrono>
 
+#include "Bezier.h"
 #include "Camera.h"
 #include "GLSL.h"
-#include "Program.h"
-#include "Shape.h"
 #include "MatrixStack.h"
 #include "Model.h"
-#include "WindowManager.h"
-#include "Texture.h"
-#include "Bezier.h"
+#include "Program.h"
+#include "Player.h"
+#include "Shape.h"
 #include "Spline.h"
+#include "Texture.h"
+#include "WindowManager.h"
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader/tiny_obj_loader.h>
@@ -38,77 +39,6 @@ double get_last_elapsed_time()
 	lasttime = actualtime;
 	return difference;
 }
-//class camera
-//{
-//public:
-//	glm::vec3 pos;
-//	glm::vec3 front;
-//	glm::vec3 up;
-//	float pitch;
-//	float yaw;
-//	float rotAngle;
-//	int w, a, s, d;
-//	camera()
-//	{
-//		w = a = s = d = 0;
-//		rotAngle = 0.0;
-//		pitch = 0;
-//		yaw = 0;
-//		pos = glm::vec3(0, 0, 0);
-//		front = glm::vec3(0, 0, -1);
-//		up = glm::vec3(0, 1, 0);
-//	}
-//	glm::mat4 process(double ftime)
-//	{
-//		float speed = 0;
-//		if (w == 1)
-//		{
-//			speed = 10 * ftime;
-//			pos = pos + speed * front;
-//		}
-//		else if (s == 1)
-//		{
-//			speed = -10 * ftime;
-//			pos = pos + speed * front;
-//		}
-//		//float yangle=0;
-//		if (a == 1) {
-//			speed = -10 * ftime;
-//			pos = pos + speed * normalize(cross(front, up));
-//			//yangle = -3 * ftime;
-//		}
-//		else if (d == 1) {
-//			//yangle = 3 * ftime;
-//			speed = 10 * ftime;
-//			pos = pos + speed * normalize(cross(front, up));
-//		}
-//
-//		//float front_y = sin(radians(pitch));
-//		//if (front_y < 80 && front_y > -80) {
-//		//	front.y = sin(radians(pitch));
-//		//}
-//		front.x = cos(radians(yaw)) * cos(radians(pitch));
-//		front.y = -1 * sin(radians(pitch));
-//		front.z = sin(radians(yaw)) * cos(radians(pitch));
-//
-//
-//		/*rotAngle += yangle;
-//		glm::mat4 R = glm::rotate(glm::mat4(1), rotAngle, glm::vec3(0, 1, 0));
-//		glm::vec4 dir = glm::vec4(0, 0, speed,1);
-//		dir = dir*R;
-//		pos += glm::vec3(dir.x, dir.y, dir.z);
-//		glm::mat4 T = glm::translate(glm::mat4(1), pos); */
-//		//return R * T;
-//
-//
-//		// front is pos + front (front = (0, 0, -1)
-//		//return glm::lookAt(pos, vec3(dir.x, dir.y, dir.z), vec3(0, 1, 0));
-//		return glm::lookAt(pos, pos + front, up);
-//
-//	}
-//};
-
-//camera mycam;
 
 Camera mycam;
 
@@ -134,10 +64,11 @@ public:
 
 	shared_ptr<Model> wolf;
 	shared_ptr<Model> palm;
-	shared_ptr<Model> skeleton_pirate;
+	//shared_ptr<Model> skeleton_pirate;
+	shared_ptr<Player> skeleton_pirate;
 
 
-	shared_ptr<Shape> theBunny;
+	///shared_ptr<Shape> theBunny;
 
 	//global data for ground plane - direct load constant defined CPU data to GPU (not obj)
 	GLuint GrndBuffObj, GrndNorBuffObj, GrndTexBuffObj, GIndxBuffObj;
@@ -147,7 +78,6 @@ public:
 
 	//the image to use as a texture (ground)
 	shared_ptr<Texture> texture0, textureWolf, texture1, textureDaySky, textureNightSky;
-	//shared_ptr<Texture> textureWolf;
 
 	//global data (larger program should be encapsulated)
 	vec3 gMin;
@@ -418,7 +348,8 @@ public:
 		palm = make_shared<Model>(resourceDirectory + "/palmtreeOBJ/palmtree.obj"); // creating Model
 
 		// Pirate
-		skeleton_pirate = make_shared<Model>(resourceDirectory + "/skeleton-pirate/source/skeleton-pirate.obj"); // skele model
+		//skeleton_pirate = make_shared<Model>(resourceDirectory + "/skeleton-pirate/source/skeleton-pirate.obj"); // skele model
+		skeleton_pirate = make_shared<Player>(resourceDirectory + "/skeleton-pirate/source/skeleton-pirate.obj"); // skele model
 
 
 
@@ -443,20 +374,20 @@ public:
 		//gMin.y = dog->min.y;
 
 		// Initialize bunny mesh.
-		vector<tinyobj::shape_t> TOshapesB;
- 		vector<tinyobj::material_t> objMaterialsB;
-		//load in the mesh and make the shape(s)
- 		rc = tinyobj::LoadObj(TOshapesB, objMaterialsB, errStr, (resourceDirectory + "/bunnyNoNorm.obj").c_str());
- 		//rc = tinyobj::LoadObj(TOshapesB, objMaterialsB, errStr, (resourceDirectory + "/bunny.obj").c_str());
-		if (!rc) {
-			cerr << errStr << endl;
-		} else {
-			
-			theBunny = make_shared<Shape>();
-			theBunny->createShape(TOshapesB[0]);
-			theBunny->measure();
-			theBunny->init();
-		}
+		//vector<tinyobj::shape_t> TOshapesB;
+ 	//	vector<tinyobj::material_t> objMaterialsB;
+		////load in the mesh and make the shape(s)
+ 	//	rc = tinyobj::LoadObj(TOshapesB, objMaterialsB, errStr, (resourceDirectory + "/bunnyNoNorm.obj").c_str());
+ 	//	//rc = tinyobj::LoadObj(TOshapesB, objMaterialsB, errStr, (resourceDirectory + "/bunny.obj").c_str());
+		//if (!rc) {
+		//	cerr << errStr << endl;
+		//} else {
+		//	
+		//	theBunny = make_shared<Shape>();
+		//	theBunny->createShape(TOshapesB[0]);
+		//	theBunny->measure();
+		//	theBunny->init();
+		//}
 
 		cocoStartTime = glfwGetTime();
 
@@ -723,14 +654,14 @@ public:
 		  }
 		Model->popMatrix(); */
 
-		Model->pushMatrix();
-			Model->translate(vec3(-5, -1, 10));
-			// Model->scale(vec3(0.85, 0.85, 0.85)); //bunny w/ normals
-			Model->scale(vec3(8, 8, 8)); //bunny w/o normals
-			SetMaterial(prog, materialType);
-			glUniformMatrix4fv(prog->getUniform("M"), 1, GL_FALSE, value_ptr(Model->topMatrix()));
-			theBunny->draw(prog);
-		Model->popMatrix();
+		//Model->pushMatrix();
+		//	Model->translate(vec3(-5, -1, 10));
+		//	// Model->scale(vec3(0.85, 0.85, 0.85)); //bunny w/ normals
+		//	Model->scale(vec3(8, 8, 8)); //bunny w/o normals
+		//	SetMaterial(prog, materialType);
+		//	glUniformMatrix4fv(prog->getUniform("M"), 1, GL_FALSE, value_ptr(Model->topMatrix()));
+		//	theBunny->draw(prog);
+		//Model->popMatrix();
 
 
 		float sp = 3.0;
@@ -794,6 +725,8 @@ public:
 			Model->scale(vec3(0.1, 0.1, 0.1));
 			//glUniformMatrix4fv(prog->getUniform("M"), 1, GL_FALSE, value_ptr(Model->topMatrix()));
 			setModel(prog, Model);
+			skeleton_pirate->setLocation(vec3(0.3, -0.7, -4));
+			skeleton_pirate->setScale(vec3(0.1, 0.1, 0.1));
 			skeleton_pirate->draw(prog);
 		Model->popMatrix();
 

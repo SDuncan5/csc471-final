@@ -19,8 +19,14 @@ public:
 	virtual ~Model();
 	void draw(const std::shared_ptr<Program> prog) const;
 	std::vector<std::shared_ptr<Shape>> getMesh() const { return mesh_shapes; };
+	glm::vec3 getLocation() const { return location; };
+	void setLocation(glm::vec3 loc) { location = loc; };
+	glm::vec3 getScale() const { return scale; };
+	void setScale(glm::vec3 sca) { scale = sca; };
 private:
 	std::vector<std::shared_ptr<Shape>> mesh_shapes;
+	glm::vec3 location = glm::vec3(0, 0, 0);
+	glm::vec3 scale = glm::vec3(1, 1, 1);
 };
 
 #endif
