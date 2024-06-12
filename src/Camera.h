@@ -9,8 +9,8 @@ class Camera {
 
 public:
 	glm::vec3 pos = glm::vec3(0, 0, 0);
-	glm::vec3 front = glm::vec3(0, 0, -1);;
-	glm::vec3 up = glm::vec3(0, 1, 0);;
+	glm::vec3 front = glm::vec3(0, 0, -1);
+	glm::vec3 up = glm::vec3(0, 1, 0);
 	float pitch = 0;
 	float yaw = 0;
 	float rotAngle = 0.0;

@@ -124,38 +124,59 @@ public:
 		//if (key == GLFW_KEY_F && action == GLFW_PRESS){
 		//	gCamH  -= 0.25;
 		//}
+
+		// TODO call player move here
+		//skeleton_pirate->move(key, action);
 		
 		// moves camera w/ wasd
-		if (key == GLFW_KEY_W && action == GLFW_PRESS)
-		{
+		if (key == GLFW_KEY_W && action == GLFW_PRESS) {
+			skeleton_pirate->w = 1;
+		}
+		if (key == GLFW_KEY_W && action == GLFW_RELEASE) {
+			skeleton_pirate->w = 0;
+		}
+		if (key == GLFW_KEY_S && action == GLFW_PRESS) {
+			skeleton_pirate->s = 1;
+		}
+		if (key == GLFW_KEY_S && action == GLFW_RELEASE) {
+			skeleton_pirate->s = 0;
+		}
+		if (key == GLFW_KEY_A && action == GLFW_PRESS) {
+			skeleton_pirate->a = 1;
+		}
+		if (key == GLFW_KEY_A && action == GLFW_RELEASE) {
+			skeleton_pirate->a = 0;
+		}
+		if (key == GLFW_KEY_D && action == GLFW_PRESS) {
+			skeleton_pirate->d = 1;
+		}
+		if (key == GLFW_KEY_D && action == GLFW_RELEASE) {
+			skeleton_pirate->d = 0;
+		}
+
+		// moving camera w/ arrow keys
+		if (key == GLFW_KEY_UP && action == GLFW_PRESS) {
 			mycam.w = 1;
 		}
-		if (key == GLFW_KEY_W && action == GLFW_RELEASE)
-		{
+		if (key == GLFW_KEY_UP && action == GLFW_RELEASE) {
 			mycam.w = 0;
 		}
-		if (key == GLFW_KEY_S && action == GLFW_PRESS)
-		{
+		if (key == GLFW_KEY_DOWN && action == GLFW_PRESS) {
 			mycam.s = 1;
 		}
-		if (key == GLFW_KEY_S && action == GLFW_RELEASE)
-		{
+		if (key == GLFW_KEY_DOWN && action == GLFW_RELEASE) {
 			mycam.s = 0;
 		}
-		if (key == GLFW_KEY_A && action == GLFW_PRESS)
-		{
+		if (key == GLFW_KEY_LEFT && action == GLFW_PRESS) {
 			mycam.a = 1;
 		}
-		if (key == GLFW_KEY_A && action == GLFW_RELEASE)
-		{
+		if (key == GLFW_KEY_LEFT && action == GLFW_RELEASE) {
 			mycam.a = 0;
 		}
-		if (key == GLFW_KEY_D && action == GLFW_PRESS)
-		{
+		if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS) {
 			mycam.d = 1;
 		}
-		if (key == GLFW_KEY_D && action == GLFW_RELEASE)
-		{
+		if (key == GLFW_KEY_RIGHT && action == GLFW_RELEASE) {
 			mycam.d = 0;
 		}
 
@@ -350,6 +371,9 @@ public:
 		// Pirate
 		//skeleton_pirate = make_shared<Model>(resourceDirectory + "/skeleton-pirate/source/skeleton-pirate.obj"); // skele model
 		skeleton_pirate = make_shared<Player>(resourceDirectory + "/skeleton-pirate/source/skeleton-pirate.obj"); // skele model
+		//skeleton_pirate = make_shared<Player>(resourceDirectory + "/dog.obj"); // skele model
+		skeleton_pirate->setLocation(vec3(0.3, -0.7, -4));
+		skeleton_pirate->setScale(vec3(0.1, 0.1, 0.1));
 
 
 
@@ -719,14 +743,16 @@ public:
 			palm ->draw(prog);
 		Model->popMatrix(); */
 
+		// Call move function on pirate
+		skeleton_pirate->move(frametime);
+
 		//draw skele pirate
 		Model->pushMatrix(); // T R S
-			Model->translate(vec3(.3, -.7, -4));
-			Model->scale(vec3(0.1, 0.1, 0.1));
+			Model->translate(skeleton_pirate->getLocation());
+			Model->scale(skeleton_pirate->getScale());
+			Model->rotate(skeleton_pirate->getRotationAngle(), skeleton_pirate->getRotationAxis());
 			//glUniformMatrix4fv(prog->getUniform("M"), 1, GL_FALSE, value_ptr(Model->topMatrix()));
 			setModel(prog, Model);
-			skeleton_pirate->setLocation(vec3(0.3, -0.7, -4));
-			skeleton_pirate->setScale(vec3(0.1, 0.1, 0.1));
 			skeleton_pirate->draw(prog);
 		Model->popMatrix();
 
