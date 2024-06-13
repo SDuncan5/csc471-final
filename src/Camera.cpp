@@ -47,12 +47,18 @@ glm::mat4 Camera::process(double ftime)
 	//	pos = pos + speed * normalize(cross(front, up));
 	//}
 
-	float horizontalDistance = calculateHorizontalDistance();
-	float verticalDistance = calculateVerticalDistance();
-	calculateCameraPosition(horizontalDistance, verticalDistance);
+	//float horizontalDistance = calculateHorizontalDistance();
+	//float verticalDistance = calculateVerticalDistance();
+	//calculateCameraPosition(horizontalDistance, verticalDistance);
 
-	yaw = 180 - (this->player->getRotationAngle() + angleAroundPlayer);
-	yaw = fmod(yaw, 360);
+	//yaw = 180 - (this->player->getRotationAngle() + angleAroundPlayer);
+	//yaw = fmod(yaw, 360);
+
+	cout << "Angle = " << angle << endl;
+	pos.x = player->getLocation().x + radius * cos(radians(angle));
+	pos.y = player->getLocation().y + 3;
+	pos.z = player->getLocation().z + radius * sin(radians(angle));
+
 
 	//cout << "Pitch: " << pitch << " Yaw: " << yaw << endl;
 
@@ -60,9 +66,9 @@ glm::mat4 Camera::process(double ftime)
 	//if (front_y < 80 && front_y > -80) {
 	//	front.y = sin(radians(pitch));
 	//}
-	front.x = cos(radians(yaw)) * cos(radians(pitch));
+	/*front.x = cos(radians(yaw)) * cos(radians(pitch));
 	front.y = -1 * sin(radians(pitch));
-	front.z = sin(radians(yaw)) * cos(radians(pitch));
+	front.z = sin(radians(yaw)) * cos(radians(pitch));*/
 
 
 	/*rotAngle += yangle;
@@ -76,7 +82,8 @@ glm::mat4 Camera::process(double ftime)
 
 	// front is pos + front (front = (0, 0, -1)
 	//return glm::lookAt(pos, vec3(dir.x, dir.y, dir.z), vec3(0, 1, 0));
-	return glm::lookAt(pos, pos + front, up);
+	//return glm::lookAt(pos, pos + front, up);
+	return glm::lookAt(pos, player->getLocation(), up);
 	//return glm::lookAt(pos, player->getLocation(), up);
 	//return glm::lookAt(pos, pos + player->getLocation(), up);
 }

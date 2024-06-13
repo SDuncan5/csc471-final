@@ -283,9 +283,10 @@ public:
 		
 		// calc angle around player 
 		if (mouse1State == GLFW_PRESS) {
-			float angleChange = mouseOffsetX * 0.3f;
+			/*float angleChange = mouseOffsetX * 0.3f;
 			mycam.setAngleAroundPlayer(mycam.getAngleAroundPlayer() - angleChange);
-			cout << "Angle Around Player: " << mycam.getAngleAroundPlayer() << endl;
+			cout << "Angle Around Player: " << mycam.getAngleAroundPlayer() << endl;*/
+			mycam.angle = mycam.angle + mouseOffsetX * 0.3f;
 		}
 
 		// calc camera pitch
@@ -463,6 +464,8 @@ public:
 		skeleton_pirate->setLocation(vec3(0.3, -0.7, -4));
 		skeleton_pirate->setScale(vec3(0.1, 0.1, 0.1));
 		mycam.setPlayer(skeleton_pirate);
+		mycam.pos = vec3(0.3, 2, -10);
+		mycam.front = skeleton_pirate->getLocation();
 
 
 

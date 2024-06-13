@@ -14,6 +14,8 @@ public:
 	float pitch = glm::radians(20.0);
 	float yaw = 0;
 	float rotAngle = 0.0;
+	float angle = 0.0;
+	float radius = 5;
 	int w, a, s, d = 0;
 	float getDistanceFromPlayer() const { return distanceFromPlayer; };
 	void setDistanceFromPlayer(float dist) { distanceFromPlayer = dist; };
