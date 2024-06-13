@@ -41,6 +41,7 @@ double get_last_elapsed_time()
 }
 
 Camera mycam;
+float deltaTime;
 
 class Application : public EventCallbacks
 {
@@ -67,7 +68,6 @@ public:
 	//shared_ptr<Model> skeleton_pirate;
 	shared_ptr<Player> skeleton_pirate;
 
-
 	///shared_ptr<Shape> theBunny;
 
 	//global data for ground plane - direct load constant defined CPU data to GPU (not obj)
@@ -92,6 +92,15 @@ public:
 	float hTheta = 0;
 	float materialType = 0;
 	float numMaterials = 3;
+
+	// Mouse Input
+	double lastMouseX = 0.0;
+	double lastMouseY = 0.0;
+	double mouseX = 0.0;
+	double mouseY = 0.0;
+	double mouseOffsetX = 0.0;
+	double mouseOffsetY = 0.0;
+	bool firstMouse = true; // calcs first mouse movement
 
 	Spline splinepath[2];
 	bool goCamera = false;
@@ -212,22 +221,86 @@ public:
 
 	void mouseCallback(GLFWwindow *window, int button, int action, int mods)
 	{
-		double posX, posY;
+		//double posX, posY;
 
-		if (action == GLFW_PRESS)
-		{
-			 glfwGetCursorPos(window, &posX, &posY);
-			 cout << "Pos X " << posX <<  " Pos Y " << posY << endl;
+		//if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS) {
+			//glfwGetCursorPos(window, &posX, &posY);
+		glfwGetCursorPos(window, &mouseX, &mouseY);
+		cout << "Pos X " << mouseX << " Pos Y " << mouseY << endl;
+
+		if (firstMouse) {
+			lastMouseX = mouseX;
+			lastMouseY = mouseY;
+			firstMouse = false;
 		}
+
+		// calc offset
+		mouseOffsetX = mouseX - lastMouseX;
+		mouseOffsetY = lastMouseY - mouseY; // oppo b/c inverted
+
+		lastMouseX = mouseX;
+		lastMouseY = mouseY;
+
+		cout << "DT: " << deltaTime << "\n"
+			<< "Mouse offsetX: " << mouseOffsetX << " Mouse offsetY: " << mouseOffsetY << endl;
+		//}
+
+		//if (action == GLFW_PRESS)
+		//{
+		//	 glfwGetCursorPos(window, &posX, &posY);
+		//	 cout << "Pos X " << posX <<  " Pos Y " << posY << endl;
+
+
+		//}
+	}
+
+	void cursorCallBack(GLFWwindow* window)
+	{
+		//double posX, posY;
+
+		int mouse1State = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+		int mouse2State = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
+
+		if (mouse1State == GLFW_PRESS) {
+			//glfwGetCursorPos(window, &posX, &posY);
+			glfwGetCursorPos(window, &mouseX, &mouseY);
+			cout << "Pos X " << mouseX << " Pos Y " << mouseY << endl;
+
+			if (firstMouse) {
+				lastMouseX = mouseX;
+				lastMouseY = mouseY;
+				firstMouse = false;
+			}
+
+			// calc offset
+			mouseOffsetX = mouseX - lastMouseX;
+			mouseOffsetY = lastMouseY - mouseY; // oppo b/c inverted
+
+			lastMouseX = mouseX;
+			lastMouseY = mouseY;
+
+			cout << "DT: " << deltaTime << "\n"
+				<< "Mouse offsetX: " << mouseOffsetX << " Mouse offsetY: " << mouseOffsetY << endl;
+		}
+
+		//if (action == GLFW_PRESS)
+		//{
+		//	 glfwGetCursorPos(window, &posX, &posY);
+		//	 cout << "Pos X " << posX <<  " Pos Y " << posY << endl;
+
+
+		//}
 	}
 
 	void scrollCallback(GLFWwindow* window, double deltaX, double deltaY) {
 		//cout << "xDel + yDel " << deltaX << " " << deltaY << endl;
 		//fill in for game camera
-		float new_pitch = mycam.pitch + deltaY * 1.5;
-		if (new_pitch <= 80 && new_pitch >= -80) //only update if within bounds
-			mycam.pitch = new_pitch;
-		mycam.yaw = mycam.yaw + deltaX * 1.5;
+		//float new_pitch = mycam.pitch + deltaY * 1.5;
+		//if (new_pitch <= 80 && new_pitch >= -80) //only update if within bounds
+		//	mycam.pitch = new_pitch;
+		//mycam.yaw = mycam.yaw + deltaX * 1.5;
+		float zoomLevel = deltaY * 0.5;
+		mycam.setDistanceFromPlayer(mycam.getDistanceFromPlayer() - zoomLevel);
 	}
 
 	void resizeCallback(GLFWwindow *window, int width, int height)
@@ -597,6 +670,9 @@ public:
 		//Use the matrix stack for Lab 6
 		float aspect = width/(float)height;
 
+		// check mouse position for camera
+		cursorCallBack(windowManager->getHandle());
+
 		// Create the matrix stacks - please leave these alone for now
 		auto Projection = make_shared<MatrixStack>();
 		//auto View = make_shared<MatrixStack>();
@@ -854,7 +930,7 @@ int main(int argc, char *argv[])
 		auto nextLastTime = chrono::high_resolution_clock::now();
 
 		// get time since last frame
-		float deltaTime =
+		deltaTime =
 			chrono::duration_cast<std::chrono::microseconds>(
 				chrono::high_resolution_clock::now() - lastTime)
 			.count();

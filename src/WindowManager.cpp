@@ -69,6 +69,9 @@ bool WindowManager::init(int const width, int const height)
 	// Set vsync
 	glfwSwapInterval(1);
 
+	// Input
+	glfwSetInputMode(windowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
 	glfwSetKeyCallback(windowHandle, key_callback);
 	glfwSetMouseButtonCallback(windowHandle, mouse_callback);
 	glfwSetFramebufferSizeCallback(windowHandle, resize_callback);

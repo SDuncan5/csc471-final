@@ -3,7 +3,7 @@
 #define CAMERA_H
 
 #include <glm/gtc/type_ptr.hpp>
-#include "Model.h"
+#include "Player.h"
 
 class Camera {
 
@@ -11,17 +11,26 @@ public:
 	glm::vec3 pos = glm::vec3(0, 0, 0);
 	glm::vec3 front = glm::vec3(0, 0, -1);
 	glm::vec3 up = glm::vec3(0, 1, 0);
-	float pitch = 0;
+	float pitch = glm::radians(20.0);
 	float yaw = 0;
 	float rotAngle = 0.0;
 	int w, a, s, d = 0;
+	float getDistanceFromPlayer() const { return distanceFromPlayer; };
+	void setDistanceFromPlayer(float dist) { distanceFromPlayer = dist; };
+	float getAngleAroundPlayer() const { return angleAroundPlayer; };
+	void setAngleAroundPlayer(float angle) { angleAroundPlayer = angle; };
+	std::shared_ptr<Player> getPlayer() const { return player; };
+	void setPlayer(std::shared_ptr<Player> player_ptr) { player = player_ptr; };
 
-	//Camera(Model player);
 	Camera();
+	//Camera(std::shared_ptr<Player> player);
 	glm::mat4 process(double ftime);
+	void calculateZoom();
 
 private:
-	//Model player;
+	std::shared_ptr<Player> player;
+	float distanceFromPlayer = 50;
+	float angleAroundPlayer = 0;
 };
 
 #endif

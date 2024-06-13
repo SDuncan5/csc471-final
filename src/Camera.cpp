@@ -1,19 +1,26 @@
 #include "Camera.h"
 
 using namespace glm;
+using namespace std;
+
 
 //amera::Camera(Model player)
-Camera::Camera()
-{
-	/*w = a = s = d = 0;
-	rotAngle = 0.0;
-	pitch = 0;
-	yaw = 0;
-	pos = glm::vec3(0, 0, 0);
-	front = glm::vec3(0, 0, -1);
-	up = glm::vec3(0, 1, 0);*/
-	//this->player = player;
+
+Camera::Camera() {
+
 }
+
+/* Camera::Camera(shared_ptr<Player> player)
+{
+	this->player = player;
+	//	w = a = s = d = 0;
+	//	rotAngle = 0.0;
+	//	pitch = 0;
+	//	yaw = 0;
+	//	pos = glm::vec3(0, 0, 0);
+	//	front = glm::vec3(0, 0, -1);
+	//	up = glm::vec3(0, 1, 0);
+} */
 
 glm::mat4 Camera::process(double ftime)
 {
@@ -61,5 +68,12 @@ glm::mat4 Camera::process(double ftime)
 	// front is pos + front (front = (0, 0, -1)
 	//return glm::lookAt(pos, vec3(dir.x, dir.y, dir.z), vec3(0, 1, 0));
 	return glm::lookAt(pos, pos + front, up);
-
 }
+
+void Camera::calculateZoom() {
+	float zoomLevel = 0;
+}
+
+//void Camera::calculateAngleAroundPlayer() {
+//
+//}

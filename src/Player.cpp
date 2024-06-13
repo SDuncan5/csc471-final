@@ -70,7 +70,7 @@ void Player::move(double ftime) {
 	(this->location).x = (this->location).x + dx;
 	(this->location).z = (this->location).z + dz;
 
-	cout << "Player rotAngle = " << this->rotAngle << endl;
+	//cout << "Player rotAngle = " << this->rotAngle << endl;
 
 	/*float dx = distance * sin(radians(this->rotAngle));
 	float dz = distance * cos(radians(this->rotAngle));
