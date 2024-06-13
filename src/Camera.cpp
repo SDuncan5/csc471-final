@@ -24,28 +24,37 @@ Camera::Camera() {
 
 glm::mat4 Camera::process(double ftime)
 {
-	float speed = 0;
-	if (w == 1)
-	{
-		speed = 10 * ftime;
-		pos = pos + speed * front;
-	}
-	else if (s == 1)
-	{
-		speed = -10 * ftime;
-		pos = pos + speed * front;
-	}
-	//float yangle=0;
-	if (a == 1) {
-		speed = -10 * ftime;
-		pos = pos + speed * normalize(cross(front, up));
-		//yangle = -3 * ftime;
-	}
-	else if (d == 1) {
-		//yangle = 3 * ftime;
-		speed = 10 * ftime;
-		pos = pos + speed * normalize(cross(front, up));
-	}
+	//float speed = 0;
+	//if (w == 1)
+	//{
+	//	speed = 10 * ftime;
+	//	pos = pos + speed * front;
+	//}
+	//else if (s == 1)
+	//{
+	//	speed = -10 * ftime;
+	//	pos = pos + speed * front;
+	//}
+	////float yangle=0;
+	//if (a == 1) {
+	//	speed = -10 * ftime;
+	//	pos = pos + speed * normalize(cross(front, up));
+	//	//yangle = -3 * ftime;
+	//}
+	//else if (d == 1) {
+	//	//yangle = 3 * ftime;
+	//	speed = 10 * ftime;
+	//	pos = pos + speed * normalize(cross(front, up));
+	//}
+
+	float horizontalDistance = calculateHorizontalDistance();
+	float verticalDistance = calculateVerticalDistance();
+	calculateCameraPosition(horizontalDistance, verticalDistance);
+
+	yaw = 180 - (this->player->getRotationAngle() + angleAroundPlayer);
+	yaw = fmod(yaw, 360);
+
+	//cout << "Pitch: " << pitch << " Yaw: " << yaw << endl;
 
 	//float front_y = sin(radians(pitch));
 	//if (front_y < 80 && front_y > -80) {
@@ -68,11 +77,34 @@ glm::mat4 Camera::process(double ftime)
 	// front is pos + front (front = (0, 0, -1)
 	//return glm::lookAt(pos, vec3(dir.x, dir.y, dir.z), vec3(0, 1, 0));
 	return glm::lookAt(pos, pos + front, up);
+	//return glm::lookAt(pos, player->getLocation(), up);
+	//return glm::lookAt(pos, pos + player->getLocation(), up);
 }
 
-void Camera::calculateZoom() {
-	float zoomLevel = 0;
+float Camera::calculateHorizontalDistance() {
+	return (float)(distanceFromPlayer * cos(radians(pitch)));
 }
+
+float Camera::calculateVerticalDistance() {
+	return (float)(distanceFromPlayer * sin(radians(pitch)));
+}
+
+void Camera::calculateCameraPosition(float horizDistance, float verticDistance) {
+	float theta = this->getPlayer()->getRotationAngle() + radians(angleAroundPlayer); // in radians
+	cout << "Theta: " << theta << endl;
+	float offsetX = (float) horizDistance * sin(theta);
+	float offsetZ = (float) horizDistance * cos(theta);
+	pos.x = this->getPlayer()->getLocation().x - offsetX;
+	pos.x = this->getPlayer()->getLocation().z - offsetZ;
+	pos.y = this->getPlayer()->getLocation().y + verticDistance;
+}
+
+// CREATE PLAYER SETUP CLASS
+// GET PLAYER POS AND MAKE A DEFAULT FRONT AND POSITION BEHIND PLAYER
+
+//void Camera::calculateZoom() {
+//	float zoomLevel = 0;
+//}
 
 //void Camera::calculateAngleAroundPlayer() {
 //

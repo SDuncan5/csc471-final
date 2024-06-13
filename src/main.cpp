@@ -226,23 +226,23 @@ public:
 		//if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS) {
 			//glfwGetCursorPos(window, &posX, &posY);
 		glfwGetCursorPos(window, &mouseX, &mouseY);
-		cout << "Pos X " << mouseX << " Pos Y " << mouseY << endl;
+		// cout << "Pos X " << mouseX << " Pos Y " << mouseY << endl;
 
-		if (firstMouse) {
-			lastMouseX = mouseX;
-			lastMouseY = mouseY;
-			firstMouse = false;
-		}
+		//if (firstMouse) {
+		//	lastMouseX = mouseX;
+		//	lastMouseY = mouseY;
+		//	firstMouse = false;
+		//}
 
-		// calc offset
-		mouseOffsetX = mouseX - lastMouseX;
-		mouseOffsetY = lastMouseY - mouseY; // oppo b/c inverted
+		//// calc offset
+		//mouseOffsetX = mouseX - lastMouseX;
+		//mouseOffsetY = lastMouseY - mouseY; // oppo b/c inverted
 
-		lastMouseX = mouseX;
-		lastMouseY = mouseY;
+		//lastMouseX = mouseX;
+		//lastMouseY = mouseY;
 
-		cout << "DT: " << deltaTime << "\n"
-			<< "Mouse offsetX: " << mouseOffsetX << " Mouse offsetY: " << mouseOffsetY << endl;
+		/*cout << "DT: " << deltaTime << "\n"
+			<< "Mouse offsetX: " << mouseOffsetX << " Mouse offsetY: " << mouseOffsetY << endl; */
 		//}
 
 		//if (action == GLFW_PRESS)
@@ -261,27 +261,42 @@ public:
 		int mouse1State = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
 		int mouse2State = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
 
-		if (mouse1State == GLFW_PRESS) {
-			//glfwGetCursorPos(window, &posX, &posY);
-			glfwGetCursorPos(window, &mouseX, &mouseY);
-			cout << "Pos X " << mouseX << " Pos Y " << mouseY << endl;
+		//glfwGetCursorPos(window, &posX, &posY);
+		glfwGetCursorPos(window, &mouseX, &mouseY);
+		//cout << "Pos X " << mouseX << " Pos Y " << mouseY << endl;
 
-			if (firstMouse) {
-				lastMouseX = mouseX;
-				lastMouseY = mouseY;
-				firstMouse = false;
-			}
-
-			// calc offset
-			mouseOffsetX = mouseX - lastMouseX;
-			mouseOffsetY = lastMouseY - mouseY; // oppo b/c inverted
-
+		if (firstMouse) {
 			lastMouseX = mouseX;
 			lastMouseY = mouseY;
-
-			cout << "DT: " << deltaTime << "\n"
-				<< "Mouse offsetX: " << mouseOffsetX << " Mouse offsetY: " << mouseOffsetY << endl;
+			firstMouse = false;
 		}
+
+		// calc offset
+		mouseOffsetX = mouseX - lastMouseX;
+		mouseOffsetY = lastMouseY - mouseY; // oppo b/c inverted
+
+		lastMouseX = mouseX;
+		lastMouseY = mouseY;
+
+		//cout << "DT: " << deltaTime << "\n"
+		//	<< "Mouse offsetX: " << mouseOffsetX << " Mouse offsetY: " << mouseOffsetY << endl;
+		
+		// calc angle around player 
+		if (mouse1State == GLFW_PRESS) {
+			float angleChange = mouseOffsetX * 0.3f;
+			mycam.setAngleAroundPlayer(mycam.getAngleAroundPlayer() - angleChange);
+			cout << "Angle Around Player: " << mycam.getAngleAroundPlayer() << endl;
+		}
+
+		// calc camera pitch
+		if (mouse2State == GLFW_PRESS) {
+			float pitchChange = mouseOffsetY * 0.1f;
+			if ((mycam.pitch - pitchChange) < 80 && (mycam.pitch - pitchChange) > -80) {
+				mycam.pitch -= pitchChange;
+			}
+			cout << "Camer Pitch: " << mycam.pitch << endl;
+		}
+		
 
 		//if (action == GLFW_PRESS)
 		//{
@@ -447,6 +462,7 @@ public:
 		//skeleton_pirate = make_shared<Player>(resourceDirectory + "/dog.obj"); // skele model
 		skeleton_pirate->setLocation(vec3(0.3, -0.7, -4));
 		skeleton_pirate->setScale(vec3(0.1, 0.1, 0.1));
+		mycam.setPlayer(skeleton_pirate);
 
 
 

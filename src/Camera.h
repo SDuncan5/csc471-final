@@ -25,12 +25,16 @@ public:
 	Camera();
 	//Camera(std::shared_ptr<Player> player);
 	glm::mat4 process(double ftime);
-	void calculateZoom();
+	//void calculateZoom();
 
 private:
 	std::shared_ptr<Player> player;
-	float distanceFromPlayer = 50;
+	float distanceFromPlayer = 10;
 	float angleAroundPlayer = 0;
+	float calculateHorizontalDistance();
+	float calculateVerticalDistance();
+	void calculateCameraPosition(float horizDistance, float verticDistance);
+	
 };
 
 #endif
