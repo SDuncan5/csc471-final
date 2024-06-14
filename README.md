@@ -41,12 +41,12 @@ The treasure chest model randomly spawns on the “island” every time the game
 I was initially going to make a more advanced 3rd person camera (and spent a lot of time on it) where you could adjust the pitch, zoom in closer or further from the character, and also circle around the character. I was able to get the zoom working and was able to adjust the pitch, but the camera wasn’t properly following the character. So, I opted to have a more simple camera that worked properly.
 In addition, the palm trees “randomly” spawn around the map so every time you open the game, they’ll be in different locations.
 
-Images
+Images <br>
 https://youtu.be/7yZ2EhsxVAk
 
-References
-Player Movement: https://www.youtube.com/watch?v=d-kuzyCkjoQ&list=PLRIWtICgwaX0u7Rf9zkZhLoLuZVfUksDP&index=19&ab_channel=ThinMatrix
-3D Camera: https://www.youtube.com/watch?v=PoxDDZmctnU&ab_channel=ThinMatrix
+References <br>
+Player Movement: https://www.youtube.com/watch?v=d-kuzyCkjoQ&list=PLRIWtICgwaX0u7Rf9zkZhLoLuZVfUksDP&index=19&ab_channel=ThinMatrix <br>
+3D Camera: https://www.youtube.com/watch?v=PoxDDZmctnU&ab_channel=ThinMatrix <br>
 3D Camera OpenGL: https://www.youtube.com/watch?v=eJ6IQY02cdY&list=PL6xSOsbVA1eYSZTKBxnoXYboy7wc4yg-Z&index=42&ab_channel=SurajSharma
 
 
