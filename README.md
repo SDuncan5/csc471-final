@@ -34,7 +34,9 @@ Enhanced Technology
 * Created functionality to make the user control the player
 * Overhauled the camera to make it follow the player.
 
+
 Extras
+
 The treasure chest model randomly spawns on the “island” every time the game is loaded up.
 I was initially going to make a more advanced 3rd person camera (and spent a lot of time on it) where you could adjust the pitch, zoom in closer or further from the character, and also circle around the character. I was able to get the zoom working and was able to adjust the pitch, but the camera wasn’t properly following the character. So, I opted to have a more simple camera that worked properly.
 In addition, the palm trees “randomly” spawn around the map so every time you open the game, they’ll be in different locations.
