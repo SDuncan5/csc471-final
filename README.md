@@ -4,12 +4,12 @@ GitHub: https://github.com/SDuncan5/csc471-final
 Introduction
 	My final project was initially going to have a randomly spawned chest in the world and the player was going to search for it in a height-mapped world, but I wasn’t able to implement all of those technologies in time unfortunately. So, my final was focused around making the player character (skeleton pirate) move around the world with user inputs and creating a 3rd person camera on an island scene.
 
-Inputs:
-W to move forwards
-S to move backwards
-A to turn left
-D to turn right
-Left shift to sprint when moving forwards
+Inputs: <br>
+W to move forwards <br>
+S to move backwards <br>
+A to turn left <br>
+D to turn right <br>
+Left shift to sprint when moving forwards <br>
 
 Hold M1 and move mouse back and forth to circle around player
 
