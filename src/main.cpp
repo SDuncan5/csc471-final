@@ -121,6 +121,10 @@ public:
 	const float cocoStartY = 1.6;
 	const float cocoGroundTime = 2;
 
+	// need matrix of 100 random floats btwwn 1 and 13
+	std::vector<float> palm_spacing;
+
+
 	void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods)
 	{
 		if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
@@ -439,6 +443,9 @@ public:
 		splinepath[0] = Spline(glm::vec3(-5.76, 2.34, 4.85), glm::vec3(-8.78, 4.33, -2.9), glm::vec3(-3.02, 2.08, -5.54), 3);
 		splinepath[1] = Spline(glm::vec3(-3.02, 2.08, -5.54), glm::vec3(-2.4, 1.09, 8), glm::vec3(1.34, 1.6, -3.3), glm::vec3(8.3, 7.7, -7.85), 5);
 
+
+		
+
 	}
 
 	float randomFloat(int min, int max) {
@@ -480,6 +487,13 @@ public:
 
 		// Palm Tree
 		palm = make_shared<Model>(resourceDirectory + "/palmtreeOBJ/palmtree.obj"); // creating Model
+
+		// init the spacing of palm
+		palm_spacing.resize(500);
+		for (int i = 0; i < palm_spacing.size(); i++) {
+			palm_spacing[i] = randomFloat(2, 15);
+		}
+
 
 		// Treasure Chest
 		chest = make_shared<Model>(resourceDirectory + "/chestlx_closed.obj"); // creating Model
@@ -950,17 +964,23 @@ public:
 		//Model->popMatrix();
 
 
-		float sp = 3.0;
+		//float sp = 3.0;
+		float sp = 10.0;
 		float off = -3.5;
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
+		int space = 0;
+		for (int i = -5; i < 7; i++) {
+			for (int j = -5; j < 7; j++) {
 				Model->pushMatrix();
+					if ((off + sp * i) > 50 || (off + sp * j) > 50 || (off + sp * i) < -50 || (off + sp * j) < -50)
+						continue;
 					Model->translate(vec3(off + sp * i, -1, off + sp * j));
 					// Model->scale(vec3(0.85, 0.85, 0.85)); //bunny w/ normals
 					Model->scale(vec3(0.06, 0.06, 0.06)); //bunny w/o normals
 					SetMaterial(prog, (i + j) % 3);
 					glUniformMatrix4fv(prog->getUniform("M"), 1, GL_FALSE, value_ptr(Model->topMatrix()));
 					palm->draw(prog);
+					sp = palm_spacing[space];
+					space++;
 				Model->popMatrix();
 			}
 		}
@@ -971,6 +991,7 @@ public:
 			Model->translate(chest->getLocation());
 			Model->scale(vec3(0.4, 0.4, 0.4));
 			Model->rotate(chest->getRotationAngle(), vec3(0, 1, 0));
+			SetMaterial(prog, 1);
 			//glUniformMatrix4fv(prog->getUniform("M"), 1, GL_FALSE, value_ptr(Model->topMatrix()));
 			setModel(prog, Model);
 			chest->draw(prog);
