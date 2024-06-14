@@ -14,19 +14,19 @@ Hold M1 and move mouse back and forth to circle around player
 
 Required Components:
 Complex Environment
-includes a sky sphere, palm trees littered around the ground plane, a treasure chest, a player, and a dog (that was originally going to follow the character)
-Additionally, there’s a pirate ship w/ the hierarchical model in the background
+* includes a sky sphere, palm trees littered around the ground plane, a treasure chest, a player, and a dog (that was originally going to follow the character)
+* Additionally, there’s a pirate ship w/ the hierarchical model in the background
 Lighting
-Has ambient, diffuse, specular lighting for all regular models. No specular lighting for textured objects
-Moved the light source far away and increased the ambient lighting (x, y, z = 200) to appear more like the Sun
+* Has ambient, diffuse, specular lighting for all regular models. No specular lighting for textured objects
+* Moved the light source far away and increased the ambient lighting (x, y, z = 200) to appear more like the Sun
 Hierarchical Modeling
-Included the original waving model on the pirate ship
+* Included the original waving model on the pirate ship
 Game Camera
-Overhauled the game camera to become a 3rd person camera
-Move around the world by moving the player
+* Overhauled the game camera to become a 3rd person camera
+* Move around the world by moving the player
 Enhanced Technology
-Created functionality to make the user control the player
-Overhauled the camera to make it follow the player.
+* Created functionality to make the user control the player
+* Overhauled the camera to make it follow the player.
 
 Extras
 The treasure chest model randomly spawns on the “island” every time the game is loaded up.
