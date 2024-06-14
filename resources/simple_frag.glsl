@@ -30,7 +30,8 @@ void main()
 	//vec3 halfV = normalize( lightDir - EPos);
 	float sC = pow(clamp(dot(halfV, normal), 0, 1), MatShine);
 
-	color = vec4(MatAmb + dC*MatDif +sC*MatSpec, 1.0);
+	color = vec4(MatAmb*4 + dC*MatDif +sC*MatSpec, 1.0);
+	//color = vec4(MatAmb + dC*MatDif +sC*MatSpec, 1.0);
 	// color = vec4(MatAmb*10.0, 1.0);
 	// should last val be a 1 or 0?
 }

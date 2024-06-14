@@ -54,7 +54,7 @@ glm::mat4 Camera::process(double ftime)
 	//yaw = 180 - (this->player->getRotationAngle() + angleAroundPlayer);
 	//yaw = fmod(yaw, 360);
 
-	cout << "Angle = " << angle << endl;
+	// cout << "Angle = " << angle << endl;
 	pos.x = player->getLocation().x + radius * cos(radians(angle));
 	pos.y = player->getLocation().y + 3;
 	pos.z = player->getLocation().z + radius * sin(radians(angle));

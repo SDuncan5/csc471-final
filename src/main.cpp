@@ -162,6 +162,12 @@ public:
 		if (key == GLFW_KEY_D && action == GLFW_RELEASE) {
 			skeleton_pirate->d = 0;
 		}
+		if (key == GLFW_KEY_LEFT_SHIFT && action == GLFW_PRESS) {
+			skeleton_pirate->shift = 1;
+		}
+		if (key == GLFW_KEY_LEFT_SHIFT && action == GLFW_RELEASE) {
+			skeleton_pirate->shift = 0;
+		}
 
 		// moving camera w/ arrow keys
 		if (key == GLFW_KEY_UP && action == GLFW_PRESS) {
@@ -385,7 +391,8 @@ public:
 
 		//read in a load the texture
 		texture0 = make_shared<Texture>();
-  		texture0->setFilename(resourceDirectory + "/grass.jpg");
+  		//texture0->setFilename(resourceDirectory + "/grass.jpg");
+  		texture0->setFilename(resourceDirectory + "/sand.jpg");
   		texture0->init();
   		texture0->setUnit(0);
   		texture0->setWrapModes(GL_REPEAT, GL_REPEAT);
@@ -751,7 +758,8 @@ public:
 		glUniformMatrix4fv(prog->getUniform("P"), 1, GL_FALSE, value_ptr(Projection->topMatrix()));
 		//glUniformMatrix4fv(prog->getUniform("V"), 1, GL_FALSE, value_ptr(View->topMatrix()));
 		glUniformMatrix4fv(prog->getUniform("V"), 1, GL_FALSE, value_ptr(View));
-		glUniform3f(prog->getUniform("lightPos"), 2.0+lightTrans, 2.0, 2.9);
+		//glUniform3f(prog->getUniform("lightPos"), 2.0+lightTrans, 2.0, 2.9);
+		glUniform3f(prog->getUniform("lightPos"), 200.0+lightTrans, 200.0, 200.0);
 		glUniform1i(prog->getUniform("flip"), 0); // flip normals if needed
 
 		// draw the array of bunnies
@@ -865,7 +873,8 @@ public:
 		//glUniformMatrix4fv(texProg->getUniform("V"), 1, GL_FALSE, value_ptr(View->topMatrix()));
 		glUniformMatrix4fv(texProg->getUniform("V"), 1, GL_FALSE, value_ptr(View));
 		glUniformMatrix4fv(texProg->getUniform("M"), 1, GL_FALSE, value_ptr(Model->topMatrix()));
-		glUniform3f(texProg->getUniform("lightPos"), 2.0 + lightTrans, 2.0, 2.9);
+		//glUniform3f(texProg->getUniform("lightPos"), 2.0 + lightTrans, 2.0, 2.9);
+		glUniform3f(texProg->getUniform("lightPos"), 200.0 + lightTrans, 200.0, 200.0);
 		//glUniform1f(texProg->getUniform("MatShine"), 27.9);
 		glUniform1i(texProg->getUniform("flip"), 1);
 				
@@ -879,7 +888,7 @@ public:
 			wolf->draw(texProg);
 		Model->popMatrix();
 
-		glUniform1i(texProg->getUniform("flip"), 0);
+		glUniform1i(texProg->getUniform("flip"), 1);
 
 		drawGround(texProg);
 

@@ -7,7 +7,7 @@
 
 class Player : public Model {
 public:
-	int w, a, s, d = 0;
+	int w, a, s, d, shift = 0;
 	Player(std::string path);
 	void move(double ftime);
 private:

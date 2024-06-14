@@ -22,7 +22,8 @@ void main() {
     //vec4 texColorLighting = dC * texColor0 + texColor0;
 
     //vec4 texColor0 = texture(Texture0, vTexCoord); //texture color w/ tex coords
-    vec4 texColor0 = (dC + 0.5) * texture(Texture0, vTexCoord);
+    //vec4 texColor0 = (dC + 0.5) * texture(Texture0, vTexCoord);
+    vec4 texColor0 = (dC + 0.75) * texture(Texture0, vTexCoord);
 
     //vec3 phong = (ambient + diffuse) * objectColor + specular;
     //(dC + 0.3) * texture

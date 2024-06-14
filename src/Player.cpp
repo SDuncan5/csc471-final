@@ -36,6 +36,9 @@ Player::Player(std::string path)
 void Player::checkInputs() {
 	if (w == 1) {
 		this->currentSpeed = RUN_SPEED;
+		if (shift == 1) {
+			this->currentSpeed = RUN_SPEED * 1.5;
+		}
 	}
 	else if (s == 1) {
 		this->currentSpeed = -RUN_SPEED;
