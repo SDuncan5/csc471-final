@@ -65,8 +65,11 @@ public:
 
 	shared_ptr<Model> wolf;
 	shared_ptr<Model> palm;
+	shared_ptr<Model> chest;
+	shared_ptr<Model> ship;
 	//shared_ptr<Model> skeleton_pirate;
 	shared_ptr<Player> skeleton_pirate;
+	shared_ptr<Shape> mesh;
 
 	///shared_ptr<Shape> theBunny;
 
@@ -85,11 +88,16 @@ public:
 	float gCamH = 0;
 	//animation data
 	float lightTrans = 0;
-	float gTrans = -3;
+	//float gTrans = -3;
+	float gTrans = 40;
+	float hierX = 60;
+	float hierY = 1.5;
+	float hierZ = 77.75;
 	float sTheta = 0;
 	float skyTheta = 0;
 	float eTheta = 0;
 	float hTheta = 0;
+	float fTheta = 0;
 	float materialType = 0;
 	float numMaterials = 3;
 
@@ -433,6 +441,15 @@ public:
 
 	}
 
+	float randomFloat(int min, int max) {
+		if (min > max)
+			return randomFloat(max, min);
+		if (min == max)
+			return min;
+
+		return (float)min + (rand() % max) + (float)(rand()) / (float)(RAND_MAX);
+	}
+
 	void initGeom(const std::string& resourceDirectory)
 	{
 		//EXAMPLE set up to read one shape from one obj file - convert to read several
@@ -463,6 +480,29 @@ public:
 
 		// Palm Tree
 		palm = make_shared<Model>(resourceDirectory + "/palmtreeOBJ/palmtree.obj"); // creating Model
+
+		// Treasure Chest
+		chest = make_shared<Model>(resourceDirectory + "/chestlx_closed.obj"); // creating Model
+
+		// Pirate Ship
+		ship = make_shared<Model>(resourceDirectory + "/pirate_baot.obj"); // creating Model
+
+		// Hier Model
+		mesh = make_shared<Shape>();
+		mesh->createShape(TOshapes[0]);
+		mesh->measure();
+		mesh->init();
+
+		// Set random chest coords
+		srand((unsigned) time(NULL));
+		// X and Z randomly btwn 10 and 50
+		float chest_x = randomFloat(-50, 50);
+		float chest_y = -0.6;
+		float chest_z = randomFloat(-50, 50);
+		chest->setLocation(vec3(chest_x, chest_y, chest_z));
+		// y rotation btwn 0 and 360
+		chest->setRotationAngle(randomFloat(0, 360));
+
 
 		// Pirate
 		//skeleton_pirate = make_shared<Model>(resourceDirectory + "/skeleton-pirate/source/skeleton-pirate.obj"); // skele model
@@ -521,8 +561,9 @@ public:
 	//directly pass quad for the ground to the GPU
 	void initGround() {
 
-		float g_groundSize = 50;
-		float g_groundY = -0.25;
+		float g_groundSize = 70;
+		//float g_groundY = -0.25;
+		float g_groundY = 0;
 
   		// A x-z plane at y = g_groundY of dimension [-g_groundSize, g_groundSize]^2
 		float GrndPos[] = {
@@ -654,18 +695,136 @@ public:
    	/* code to draw waving hierarchical model */
    	void drawHierModel(shared_ptr<MatrixStack> Model) {
    		// draw hierarchical mesh - replace with your code if desired
+		//Model->pushMatrix();
+		//	Model->loadIdentity();
+		//	Model->translate(vec3(gTrans, 0, 6));
+		//	
+		//	//draw the torso with these transforms
+		//	Model->pushMatrix();
+		//	  Model->scale(vec3(1.15, 1.35, 1.0));
+		//	  setModel(prog, Model);
+		//	  sphere->draw(prog);
+		//	Model->popMatrix();
+		//	
+		//Model->popMatrix();
+
+		// draw mesh 
 		Model->pushMatrix();
 			Model->loadIdentity();
-			Model->translate(vec3(gTrans, 0, 6));
-			
+			Model->translate(vec3(hierX, hierY, hierZ));
+			/* draw top cube - aka head */
+			Model->pushMatrix();
+				Model->translate(vec3(0, 1.4, 0));
+				Model->scale(vec3(0.5, 0.5, 0.5));
+				setModel(prog, Model);
+				mesh->draw(prog);
+			Model->popMatrix();
 			//draw the torso with these transforms
 			Model->pushMatrix();
-			  Model->scale(vec3(1.15, 1.35, 1.0));
+			  Model->scale(vec3(1.25, 1.35, 1.25));
 			  setModel(prog, Model);
-			  sphere->draw(prog);
+			  mesh->draw(prog);
 			Model->popMatrix();
-			
+			// draw the upper 'arm' - relative 
+			//note you must change this to include 3 components!
+			Model->pushMatrix();
+			  //place at shoulder
+			  Model->translate(vec3(0.8, 0.8, 0));
+			  //rotate shoulder joint
+			  Model->rotate(sTheta, vec3(0, 0, 1));
+			  //move to shoulder joint
+			  Model->translate(vec3(0.8, 0, 0));
+	
+			    //now draw lower arm - this is INCOMPLETE and you will add a 3rd component
+			  	//right now this is in the SAME place as the upper arm
+			  	Model->pushMatrix();
+				  Model->translate(vec3(0.7, 0, 0));
+				  Model->rotate(fTheta, vec3(0, 0, 1));
+				  Model->translate(vec3(.7, 0, 0));
+
+				  //hand
+				  Model->pushMatrix();
+				    Model->translate(vec3(0.4, 0, 0));
+				    Model->rotate(hTheta, vec3(0, 0, 1));
+				    Model->translate(vec3(0.4, 0, 0));
+					Model->scale(vec3(.4, .3, .3));
+					setModel(prog, Model);
+					mesh->draw(prog);
+				  Model->popMatrix();
+
+			      Model->scale(vec3(0.7, 0.25, 0.25));
+			  	  setModel(prog, Model);
+			  	  mesh->draw(prog);
+			  	Model->popMatrix();
+
+			  //Do final scale ONLY to upper arm then draw
+			  //non-uniform scale
+			  Model->scale(vec3(0.8, 0.25, 0.25));
+			  setModel(prog, Model);
+			  mesh->draw(prog);
+			Model->popMatrix();
+		
 		Model->popMatrix();
+
+
+		// draw left arm 
+		Model->pushMatrix();
+			Model->loadIdentity();
+			Model->translate(vec3(hierX, hierY, hierZ));
+			/* draw top cube - aka head */
+			Model->pushMatrix();
+				Model->translate(vec3(0, 1.4, 0));
+				Model->scale(vec3(0.5, 0.5, 0.5));
+				setModel(prog, Model);
+				mesh->draw(prog);
+			Model->popMatrix();
+			//draw the torso with these transforms
+			Model->pushMatrix();
+				Model->scale(vec3(1.25, 1.35, 1.25));
+				setModel(prog, Model);
+				mesh->draw(prog);
+			Model->popMatrix();
+			// draw the upper 'arm' - relative 
+			//note you must change this to include 3 components!
+			Model->pushMatrix();
+			//place at shoulder
+				Model->translate(vec3(-0.8, 0.8, 0));
+				//rotate shoulder joint
+				Model->rotate(sTheta, vec3(0, 0, -1));
+				//move to shoulder joint
+				Model->translate(vec3(-0.8, 0, 0));
+
+				//now draw lower arm - this is INCOMPLETE and you will add a 3rd component
+				//right now this is in the SAME place as the upper arm
+				Model->pushMatrix();
+					Model->translate(vec3(-0.7, 0, 0));
+					Model->rotate(fTheta, vec3(0, 0, -1));
+					Model->translate(vec3(-.7, 0, 0));
+
+					//hand
+					Model->pushMatrix();
+						Model->translate(vec3(-0.4, 0, 0));
+						Model->rotate(hTheta, vec3(0, 0, -1));
+						Model->translate(vec3(-0.4, 0, 0));
+						Model->scale(vec3(.4, .3, .3));
+						setModel(prog, Model);
+						mesh->draw(prog);
+					Model->popMatrix();
+
+					Model->scale(vec3(0.7, 0.25, 0.25));
+					setModel(prog, Model);
+					mesh->draw(prog);
+				Model->popMatrix(); 
+
+			//Do final scale ONLY to upper arm then draw
+			//non-uniform scale
+				Model->scale(vec3(0.8, 0.25, 0.25));
+				setModel(prog, Model);
+				mesh->draw(prog);
+			Model->popMatrix();
+
+		Model->popMatrix();
+
    	}
 
 	void updateUsingCameraPath(float frametime) {
@@ -807,6 +966,28 @@ public:
 		}
 		Model->popMatrix();
 
+		// Treasure Chest
+		Model->pushMatrix(); // T R S
+			Model->translate(chest->getLocation());
+			Model->scale(vec3(0.4, 0.4, 0.4));
+			Model->rotate(chest->getRotationAngle(), vec3(0, 1, 0));
+			//glUniformMatrix4fv(prog->getUniform("M"), 1, GL_FALSE, value_ptr(Model->topMatrix()));
+			setModel(prog, Model);
+			chest->draw(prog);
+		Model->popMatrix();
+
+
+		Model->pushMatrix(); // T R S
+			Model->translate(vec3(60, -3, 80));
+			Model->scale(vec3(1, 1, 1));
+			Model->rotate(180, vec3(0, 1, 0));
+			//glUniformMatrix4fv(prog->getUniform("M"), 1, GL_FALSE, value_ptr(Model->topMatrix()));
+			setModel(prog, Model);
+			ship->draw(prog);
+		Model->popMatrix();
+
+
+
 		//use helper function that uses glm to create some transform matrices
 		/* Model->pushMatrix(); // T R S
 			Model->translate(vec3(-1, -1, -3));
@@ -861,9 +1042,9 @@ public:
 
 
 		//draw the waving HM
-		//SetMaterial(prog, 1);
-		//SetMaterial(prog, materialType);
-		//drawHierModel(Model);
+		SetMaterial(prog, 1);
+		SetMaterial(prog, materialType);
+		drawHierModel(Model);
 
 		prog->unbind();
 
@@ -911,9 +1092,14 @@ public:
 		//animation update example
 		skyTheta = sin(0.1 * glfwGetTime());
 		//skyTheta = sin(glfwGetTime());
-		sTheta = sin(glfwGetTime());
-		eTheta = std::max(0.0f, (float)sin(glfwGetTime()));
-		hTheta = std::max(0.0f, (float)cos(glfwGetTime()));
+		//sTheta = sin(glfwGetTime());
+		//eTheta = std::max(0.0f, (float)sin(glfwGetTime()));
+		//hTheta = std::max(0.0f, (float)cos(glfwGetTime()));
+
+		// update animation vals
+		sTheta = 0.2 * abs(sin(glfwGetTime()));
+		fTheta = 0.7 * abs(sin(4 * glfwGetTime())) + 1;
+		hTheta = 0.75 * abs(sin(4 * glfwGetTime())) - 0.25;
 
 		// Pop matrix stacks.
 		Projection->popMatrix();

@@ -56,7 +56,7 @@ glm::mat4 Camera::process(double ftime)
 
 	// cout << "Angle = " << angle << endl;
 	pos.x = player->getLocation().x + radius * cos(radians(angle));
-	pos.y = player->getLocation().y + 3;
+	pos.y = player->getLocation().y + 2.5;
 	pos.z = player->getLocation().z + radius * sin(radians(angle));
 
 
