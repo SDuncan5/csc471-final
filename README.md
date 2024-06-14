@@ -1,7 +1,7 @@
 
 GitHub: https://github.com/SDuncan5/csc471-final
 
-Introduction
+Introduction <br>
 	My final project was initially going to have a randomly spawned chest in the world and the player was going to search for it in a height-mapped world, but I wasn’t able to implement all of those technologies in time unfortunately. So, my final was focused around making the player character (skeleton pirate) move around the world with user inputs and creating a 3rd person camera on an island scene.
 
 Inputs: <br>
